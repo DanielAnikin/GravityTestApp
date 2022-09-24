@@ -23,11 +23,6 @@ import com.gravity.testapp.viewmodel.LinksViewModel
 class WebViewFragment : Fragment(R.layout.fragment_web_view) {
     private val viewModel: LinksViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = false
-    }
-
     private lateinit var binding: FragmentWebViewBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,10 +33,9 @@ class WebViewFragment : Fragment(R.layout.fragment_web_view) {
 
             btnGoBack.setOnClickListener { onGoBack() }
             btnGoForward.setOnClickListener { onGoForward() }
-//            swipeRefresh.setOnRefreshListener { refreshPage() }
+            swipeRefresh.setOnRefreshListener { refreshPage() }
 
             viewModel.linkData.observe(viewLifecycleOwner) { links ->
-                Log.d("MyTag", "Link home: ${links.home}, Link link: ${links.link}")
                 val prefManager = PrefManager(requireContext())
                 if (prefManager.loadBoolean(IS_FIRST_RUN)) {
                     loadUrl(links.link)
@@ -72,10 +66,9 @@ class WebViewFragment : Fragment(R.layout.fragment_web_view) {
             binding.webView.goForward()
     }
 
-//    private fun refreshPage() {
-//        if (viewModel.currentURL.isNotEmpty())
-//            loadUrl(viewModel.currentURL)
-//    }
+    private fun refreshPage() {
+        binding.webView.url?.let { loadUrl(it) }
+    }
 
     private fun prepareWebView() {
         binding.webView.settings.javaScriptEnabled = true
