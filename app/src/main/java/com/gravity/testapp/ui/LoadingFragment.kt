@@ -16,11 +16,6 @@ import kotlinx.coroutines.delay
 class LoadingFragment : Fragment(R.layout.fragment_loading) {
     private val viewModel: LinksViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = false
-    }
-
     private lateinit var binding: FragmentLoadingBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,7 +25,7 @@ class LoadingFragment : Fragment(R.layout.fragment_loading) {
         viewModel.status.observe(viewLifecycleOwner) { status ->
             lifecycleScope.launchWhenResumed {
                 if (status == DONE) {
-                    delay(1000) //Long loading imitation
+                    delay(2000) //Long loading imitation
                     findNavController().navigate(LoadingFragmentDirections.actionLoadingFragmentToWebViewFragment())
                 }
             }
